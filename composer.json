@@ -36,5 +36,12 @@
     "psr-4": {
       "Kaxiluo\\Swagger\\LaravelCodeGeneratorTests\\": "tests/"
     }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Kaxiluo\\Swagger\\LaravelCodeGenerator\\CodeGeneratorServiceProvider"
+      ]
+    }
   }
 }
