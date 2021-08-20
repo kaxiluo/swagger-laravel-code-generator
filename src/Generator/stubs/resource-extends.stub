@@ -1,0 +1,20 @@
+<?php
+
+namespace {{ namespace }};
+
+class {{ class }} extends {{ ParentClass }}
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        $baseInfo = parent::toArray($request);
+        return array_merge($baseInfo, [
+{{ fields }}
+        ]);
+    }
+}

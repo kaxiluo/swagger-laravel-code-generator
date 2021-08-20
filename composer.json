@@ -1,0 +1,40 @@
+{
+  "name": "kaxiluo/swagger-laravel-code-generator",
+  "description": "Automatically generate laravel models, resources, controllers, routes based on swagger documents",
+  "keywords": [
+    "php",
+    "laravel",
+    "swagger",
+    "openapi3",
+    "openapi-specification",
+    "rest api",
+    "generate",
+    "code-generator",
+    "dev-tool"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "linyiyong",
+      "email": "linyiyongcn@163.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.1.3",
+    "laravel/framework": ">=5.8",
+    "symfony/yaml": "^5.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">=6.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Kaxiluo\\Swagger\\LaravelCodeGenerator\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Kaxiluo\\Swagger\\LaravelCodeGeneratorTests\\": "tests/"
+    }
+  }
+}
