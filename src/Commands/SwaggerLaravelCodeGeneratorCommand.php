@@ -153,6 +153,7 @@ class SwaggerLaravelCodeGeneratorCommand extends Command
         $this->info('Creating route ' . $path);
 
         $controller = $this->controllerGenerator->getDefaultClassName($controller);
+        $controller = str_replace('/', '\\', $controller);
 
         $this->appendStrToApiRouteFile(
             sprintf("Route::%s('%s', '%s@%s');\n", $verb, $path, $controller, $func)

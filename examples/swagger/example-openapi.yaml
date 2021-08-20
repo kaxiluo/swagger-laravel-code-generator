@@ -1,0 +1,184 @@
+openapi: 3.0.0
+servers:
+  - url: https://your-api.local/v1/
+    description: dev server
+info:
+  description: '示例接口文档'
+  version: "1.0.0"
+  title: 'Example API'
+tags:
+  - name: article
+    description: 文章
+paths:
+  /articles:
+    get:
+      tags:
+        - article
+      summary: '获取文章列表'
+      operationId: Article/ArticleController@index
+      description: |
+        通过类型查询文章列表
+      parameters:
+        - in: query
+          name: title
+          description: '根据标题过滤文章列表'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+  /articles/{id}:
+    get:
+      tags:
+        - article
+      summary: '获取文章详情'
+      operationId: Article/ArticleController@show
+      parameters:
+        - in: path
+          name: id
+          description: '文章ID'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleDetail'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+  /articles/{id}/comments:
+    post:
+      tags:
+        - article
+      summary: '评论文章'
+      operationId: Article/CommentController@store
+      parameters:
+        - in: path
+          name: id
+          description: '文章ID'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        description: '评论内容'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '201':
+          description: 'Created'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '422':
+          $ref: '#/components/responses/422Error'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+          title: 文章标题
+        cover:
+          title: 文章封面图
+          type: string
+          format: uri
+        published_time:
+          type: string
+          title: 文章发布时间
+        author:
+          $ref: '#/components/schemas/Author'
+    ArticleDetail:
+      allOf:
+        - $ref: '#/components/schemas/Article'
+        - type: object
+          properties:
+            description:
+              type: string
+              title: html描述
+            comments:
+              type: array
+              title: 文章评论
+              items:
+                $ref: '#/components/schemas/Comment'
+    Comment:
+      type: object
+      properties:
+        nickname:
+          type: string
+          title: 评论者昵称
+        content:
+          type: string
+          title: 评论内容
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+        nickname:
+          type: string
+          title: 作者昵称
+  parameters:
+    #-------------------------------
+    # Reusable operation parameters
+    #-------------------------------
+    offsetParam: # Can be referenced via '#/components/parameters/offsetParam'
+      name: offset
+      in: query
+      description: Number of items to skip before returning the results.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+    limitParam: # Can be referenced as '#/components/parameters/limitParam'
+      name: limit
+      in: query
+      description: Maximum number of items to return.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 200
+        default: 15
+
+  responses:
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: "Unauthorized"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    422Error:
+      description: 缺失参数或参数错误
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
