@@ -5,11 +5,11 @@
     "php",
     "laravel",
     "swagger",
+    "generate",
+    "code-generator",
     "openapi3",
     "openapi-specification",
     "rest api",
-    "generate",
-    "code-generator",
     "dev-tool"
   ],
   "license": "MIT",
@@ -27,11 +27,6 @@
   "autoload": {
     "psr-4": {
       "Kaxiluo\\Swagger\\LaravelCodeGenerator\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Kaxiluo\\Swagger\\LaravelCodeGeneratorTests\\": "tests/"
     }
   },
   "extra": {
