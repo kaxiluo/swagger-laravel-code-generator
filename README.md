@@ -11,23 +11,22 @@ composer require kaxiluo/swagger-laravel-code-generator
 
 ## 使用方法
 
-`php artisan swagger-to-code:gen ./examples/swagger/example-openapi.yaml --ignored-schema-regular=^Error* --all --force`
+`php artisan swagger-to-code:gen ./docs/your-openapi.yaml --ignored-schema-regular=^Error* --all --force`
 
-可选参数 `--resource --controller --route --ignored-schema-regular --force --all`
+参数：
+- yaml文件的相对路径（相对于工程根目录）
+- 可选参数 `--resource --controller --route --ignored-schema-regular= --force --all`
 
-swagger文档例子见 `./vendor/kaxiluo/swagger-laravel-code-generator/examples/swagger/example-openapi.yml`
+~ 运行一个例子试试
+`php artisan swagger-to-code:gen ./vendor/kaxiluo/swagger-laravel-code-generator/example-swagger/example-openapi.yaml --ignored-schema-regular=^Error* --all`
 
-### 模型
+### 模型 && 资源
 
-根据文档中的 `schemas` 生成对应的Model
+根据文档中的 `schemas` 生成对应的模型和资源类，默认不会生成User模型
 
 可选参数：`--ignored-schema-regular=`
 
 参数说明：忽略文档中模型的正则表达式，示例中 `--ignored-schema-regular=^Error*` 表示不生成以Error开头的模型和资源
-
-### 资源
-
-根据文档中的 `schemas` 生成对应的API资源
 
 举个栗子，如果swagger中定义有如下schema：
 
@@ -81,7 +80,9 @@ Author:
       title: 作者昵称
 ```
 
-那么生成的资源代码如下：
+生成的模型：`Article` `Comment` `Author`
+
+生成的资源：
 
 `app/Http/Resources/ArticleResource.php`
 ```phpt
@@ -137,6 +138,23 @@ public function toArray($request)
 }
 ```
 
-### 控制器
+### 控制器 && 路由
 
-### 路由
+根据文档中 `paths` 定义的 `operationId` 生成对应的控制器和路由，如果没有定义`operationId`将不会生成控制器和路由
+
+举个栗子，如果swagger中定义
+
+```yaml
+/articles:
+  get:
+      summary: '获取文章列表'
+      operationId: Article/ArticleController@index
+```
+
+生成的控制器：
+
+`app/Controllers/Article/ArticleController.php` , 类中包含`index`方法
+
+生成的路由：
+
+`Route::get('/articles', 'Article\ArticleController@index');`

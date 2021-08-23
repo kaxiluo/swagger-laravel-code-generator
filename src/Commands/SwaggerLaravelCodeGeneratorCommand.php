@@ -30,7 +30,7 @@ class SwaggerLaravelCodeGeneratorCommand extends Command
     public function handle()
     {
         $file = $this->argument('file');
-        $yaml = Yaml::parseFile($file);
+        $yaml = Yaml::parseFile(base_path($file));
 
         if ($this->option('all')) {
             $this->input->setOption('resource', true);
@@ -63,7 +63,7 @@ class SwaggerLaravelCodeGeneratorCommand extends Command
             $dataType = $schema['type'] ?? '';
 
             // 非object或allOf组合的不创建模型
-            if ($dataType == 'object') {
+            if ($dataType == 'object' && strtolower($name) !== 'user') {
                 $this->createModel($name);
             }
 
